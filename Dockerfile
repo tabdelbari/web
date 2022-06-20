@@ -1,10 +1,7 @@
-FROM maven:3-alpine as build
+FROM openjdk:17-alpine
 COPY . /app
 WORKDIR /app
-RUN mvn install -DskipTests
-
-FROM openjdk:17-alpine
-COPY --from=build /app/target/*.jar /app/app.jar
-WORKDIR /app
+RUN ./mvnw install -DskipTests
+RUN mv target/*.jar /app/app.jar
 ENTRYPOINT ["java","-jar","app.jar"]
 EXPOSE 8080
